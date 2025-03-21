@@ -1,17 +1,17 @@
-# Sử dụng .NET SDK để build
+# Sử dụng hình ảnh .NET SDK để xây dựng ứng dụng
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /app
 
-# Copy file project và khôi phục dependencies
-COPY ./WebsiteBanHang/*.csproj ./
+# Sao chép tệp dự án và khôi phục các phụ thuộc
+COPY *.csproj ./
 RUN dotnet restore
 
-# Copy toàn bộ source code và build
-COPY ./WebsiteBanHang/ ./
+# Sao chép toàn bộ mã nguồn và xây dựng ứng dụng
+COPY . ./
 RUN dotnet publish -c Release -o /publish
 
-# Sử dụng .NET runtime để chạy ứng dụng
+# Sử dụng hình ảnh .NET Runtime để chạy ứng dụng
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build /publish .
-CMD ["dotnet", "WebsiteBanHang.dll"]
+ENTRYPOINT ["dotnet", "WebsiteBanHang.dll"]
